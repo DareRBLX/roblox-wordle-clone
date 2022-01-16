@@ -9,7 +9,7 @@ export class App extends Component<{}, {}> {
                 <frame
                     Size={new UDim2(1, 0, 1, 0)}
                     BorderSizePixel={0}
-                    BackgroundColor3={Color3.fromRGB(230, 230, 230)}
+                    BackgroundColor3={Color3.fromRGB(20, 20, 20)}
                 >
                     <StateManager></StateManager>
                     <GuessBox></GuessBox>
