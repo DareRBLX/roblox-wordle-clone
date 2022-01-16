@@ -1,7 +1,5 @@
 name: build
-on:
-  release:
-    types: [published]
+on: push
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,10 +29,13 @@ jobs:
 
       - run: rbxtsc
       
-      - run: ./rojo build --output game.rbxm
+      - run: ./rojo build --output game.rbxlx
 
       - uses: actions/upload-artifact@v2
         with:
-          name: game.rbxm
-          path: game.rbxm
+          name: game.rbxlx
+          path: game.rbxlx
+            
+
+        
 
