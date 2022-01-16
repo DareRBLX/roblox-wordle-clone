@@ -1,0 +1,40 @@
+name: build
+on:
+  release:
+    types: [published]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '17'
+      
+      # holy shit why does rojo have so many dependencies (320!!!!) it takes forever to install
+      # cargo the new node_modules?
+      #- run: sudo apt install libssl-dev
+      #- run: cargo install rojo
+      #- run: rojo -V
+      - run: wget https://github.com/rojo-rbx/rojo/releases/download/v6.2.0/rojo-6.2.0-linux.zip
+      - run: unzip rojo-6.2.0-linux.zip
+      - run: chmod +x rojo
+      - run: ./rojo -V
+
+      - run: npm install -g roblox-ts
+      - run: rbxtsc -v
+
+      - run: npm i
+
+      - run: ./.github/versionUpdate.sh
+      
+
+      - run: rbxtsc
+      
+      - run: ./rojo build --output game.rbxm
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: game.rbxm
+          path: game.rbxm
+
