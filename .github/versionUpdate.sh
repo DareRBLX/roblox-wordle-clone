@@ -11,4 +11,5 @@ UNAME=$(uname -sr)
 echo "Building $PKGNAME@$PKGVERSION ($GIT_BRANCH@$GIT_COMMIT#$GIT_TAG) (with $ROJO_VERSION & rbxtsc $TSC_VERSION (node $(node -v)) on $HOSTNAME running $UNAME)"
 echo "export {};print(\`$PKGNAME@$PKGVERSION ($GIT_BRANCH#$GIT_COMMIT#$GIT_TAG)" > ./src/client/version.client.ts
 echo "built with $ROJO_VERSION & rbxtsc $TSC_VERSION (node $(node -v))" >> ./src/client/version.client.ts
-echo "on $HOSTNAME running $UNAME\`);" >> ./src/client/version.client.ts
+echo "on $HOSTNAME running $UNAME" >> ./src/client/version.client.ts
+echo "Built at $(date)\`);" >> ./src/client/version.client.ts

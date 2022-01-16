@@ -35,7 +35,10 @@ jobs:
         with:
           name: game.rbxlx
           path: game.rbxlx
-            
+
+      - run: "curl -X POST https://apis.roblox.com/universes/v1/3257467677/places/8537272175/versions?versionType=Published -H 'x-api-key: $ROBLOX_TOKEN' -H 'Content-Type: application/xml' -d @game.rbxlx"
+      - if: ${{ github.ref == 'refs/heads/master' }}
+
 
         
 

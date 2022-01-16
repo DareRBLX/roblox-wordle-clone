@@ -7,3 +7,6 @@
 *.rbxlx
 *.rbxl
 *.lock
+
+version.client.ts
+src/client/version.client.ts
