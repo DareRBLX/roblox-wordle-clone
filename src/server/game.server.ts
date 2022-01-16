@@ -1,45 +1,10 @@
-import { Server, Server as Signals } from "@rbxts/simplesignals";
-import { GameStatus, LetterStatus, TRIES, WordleState, WORDLE_DURATION, WORD_LENGTH } from "shared/types";
-import { fillArray, playerJoined } from "shared/util";
+import { Server as Signals } from "@rbxts/simplesignals";
+import { GameStatus, LetterStatus, TRIES, WORD_LENGTH } from "shared/types";
+import { fillArray } from "shared/util";
 import { wordlist } from "shared/words";
-import { wordles } from "./wordles";
+import { getGameState, sendGameState } from "./states";
 
-const getWordleNo = () => math.floor(os.time() / WORDLE_DURATION) % wordles.size();
-const states = new Map<number, WordleState>();
-
-Server.setCallback("getTime", () => os.time());
-
-/**
- * Generates a new wordle state for the player.
- * **Note:** This function will overwrite any existing state for the player.
- * @param p {Player} The player to generate a state for
- */
-function makeGameState(p: Player) {
-    if (states.has(p.UserId)) states.delete(p.UserId);
-    const state: WordleState = {
-        attempts: [],
-        status: GameStatus.UNSTARTED,
-        answer: wordles[getWordleNo()],
-    };
-    print(state, getWordleNo(), wordles[getWordleNo()]);
-    states.set(p.UserId, state);
-    sendGameState(p);
-}
-playerJoined(makeGameState);
-
-/**
- * Sends a player their current game state.
- * @param p {Player} The player to send the state to
- */
-function sendGameState(p: Player) {
-    const state = states.get(p.UserId);
-    if (state)
-        Signals.fire("gameState", p, {
-            ...state,
-            answer: state.status >= GameStatus.SUCCESS ? state.answer : "no",
-        });
-}
-Signals.on("requestGameState", sendGameState);
+Signals.setCallback("getTime", () => os.time());
 
 /**
  * Process a player's guess.
@@ -47,7 +12,7 @@ Signals.on("requestGameState", sendGameState);
  * @param guess {string} The guess to process
  */
 function performGuess(p: Player, guess: string) {
-    const state = states.get(p.UserId)!;
+    const state = getGameState(p)!;
     if (!state) p.Kick("Something went wrong, please rejoin the game.");
     switch (state.status) {
         case GameStatus.UNSTARTED:
